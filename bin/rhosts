@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-if File.exists?(File.join(File.expand_path('../../..', __FILE__), '.git'))
-  rhosts_path = File.expand_path('../../lib', __FILE__)
-  $:.unshift(rhosts_path)
-end
+rhosts_path = File.expand_path('../../lib', __FILE__)
+$:.unshift(rhosts_path)
 require "rhosts/cli"

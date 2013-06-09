@@ -1,11 +1,8 @@
 module RHosts
   module ConsoleMethods
-    def included
-      @actives   = {}
-      @inactives = {}
-    end
-
     def map(target)
+      @actives ||= {}
+
       aaa(target) do |host, ip|
         @actives[ip] ||= []
         @actives[ip] << host
@@ -13,6 +10,8 @@ module RHosts
     end
 
     def unmap(target)
+      @inactives ||= {}
+
       aaa(target) do |host, ip|
         @inactives[ip] ||= []
         @inactives[ip] << host
