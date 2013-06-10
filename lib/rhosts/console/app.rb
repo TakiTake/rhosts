@@ -1,7 +1,5 @@
 module RHosts
   module ConsoleMethods
-    attr_accessor :actives, :inactives
-
     def actives
       @actives ||= {}
     end
