@@ -15,8 +15,8 @@ describe 'ConsoleMethods' do
     end
 
     it 'map example.com to 127.0.0.1' do
-      expect(@actives).to eq('127.0.0.1' => ['example.com'])
-      expect(@inactives).to eq({ })
+      expect(actives).to eq('127.0.0.1' => ['example.com'])
+      expect(inactives).to eq({ })
     end
   end
 end

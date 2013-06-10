@@ -1,21 +1,26 @@
 module RHosts
   module ConsoleMethods
-    def initialize
-      @actives   = {}
-      @inactives = {}
+    attr_accessor :actives, :inactives
+
+    def actives
+      @actives ||= {}
+    end
+
+    def inactives
+      @inactives ||= {}
     end
 
     def map(target)
       process(target) do |host, ip|
-        @actives[ip] ||= []
-        @actives[ip] << host
+        actives[ip] ||= []
+        actives[ip] << host
       end
     end
 
     def unmap(target)
       process(target) do |host, ip|
-        @inactives[ip] ||= []
-        @inactives[ip] << host
+        inactives[ip] ||= []
+        inactives[ip] << host
       end
     end
 
