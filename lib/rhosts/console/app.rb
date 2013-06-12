@@ -12,6 +12,7 @@ module RHosts
       process(target) do |host, ip|
         actives[ip] ||= []
         actives[ip] << host
+        puts "map #{host} to #{ip}"
       end
     end
 
@@ -19,6 +20,7 @@ module RHosts
       process(target) do |host, ip|
         inactives[ip] ||= []
         inactives[ip] << host
+        puts "unmap #{host} from #{ip}"
       end
     end
 

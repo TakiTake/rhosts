@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     rhosts (0.0.1)
+      ipaddress (~> 0.8.0)
 
 GEM
   remote: https://rubygems.org/
@@ -16,6 +17,7 @@ GEM
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.0)
     diff-lcs (1.2.4)
+    ipaddress (0.8.0)
     method_source (0.8.1)
     pry (0.9.12.2)
       coderay (~> 1.0.5)

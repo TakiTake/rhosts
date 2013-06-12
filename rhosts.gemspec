@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.description = "hosts file manager"
 
   s.rubyforge_project = "rhosts"
+  s.add_dependency 'ipaddress', '~> 0.8.0'
 
   s.files = `git ls-files -- lib/*`.split("\n")
   s.files += ["License.txt"]
