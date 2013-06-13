@@ -1,26 +1,24 @@
 require 'pp'
 require 'readline'
+require 'rhosts/configuration'
 require 'rhosts/filer'
 require 'rhosts/console/app'
 
 module RHosts
   class Console
+    attr_accessor :config
+
     include RHosts::ConsoleMethods
 
     def self.start
-      new.start
+      config = ::RHosts::Configuration.new
+      console = new(config)
+      console.start
     end
 
-    def initialize
-      @actives, @inactives = ::RHosts::Filer.load(hosts_path)
-    end
-
-    def hosts_path
-      @hosts_path ||= '/etc/hosts'
-    end
-
-    def hosts_path=(path)
-      @hosts_path = path
+    def initialize(config)
+      @config = config
+      @actives, @inactives = ::RHosts::Filer.load(@config.hosts_file_path)
     end
 
     def start
@@ -35,7 +33,7 @@ module RHosts
         when /^(u|unmap) +(.*?) +(.*?)$/
           unmap $2 => $3
         when 'hist', 'history'
-          p Readline::HISTORY.to_a
+          puts Readline::HISTORY.to_a.join("\n")
         when 'h', 'help'
           help
         when 'q', 'quit'
