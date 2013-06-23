@@ -60,7 +60,7 @@ rhosts> actives
 127.0.0.2
   stg-www.example.com
 
-rhosts> map "dev-www.example.co.jp" => "127.0.0.1"
+rhosts> map dev-www.example.co.jp 127.0.0.1
 rhosts> actives
 ### actives
 127.0.0.1
@@ -85,7 +85,7 @@ rhosts> actives
 127.0.0.2
   stg-www.example.com
 
-rhosts> unmap "dev-www.example.com" => "127.0.0.1"
+rhosts> unmap dev-www.example.com 127.0.0.1
 rhosts> actives
 ### actives
 127.0.0.1
