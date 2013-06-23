@@ -1,13 +1,14 @@
 require 'ipaddress'
+require 'pry'
 
 module RHosts
   module Filer
     class << self
-      def load(path)
+      def load
         actives = {}
         inactives = {}
 
-        File.open(path, 'r') do |file|
+        File.open(RHosts.config.hosts_file_path, 'r') do |file|
           file.each do |line|
             storage = Mapping.active?(line) ? actives : inactives
 
@@ -30,7 +31,47 @@ module RHosts
         [actives, inactives]
       end
 
+      def backup
+        bk_file_path = backup_file_path
+        hosts_file_path = RHosts.config.hosts_file_path
+
+        if File.writable?(bk_file_path)
+          FileUtils.cp(hosts_file_path, bk_file_path)
+          puts "backup: #{bk_file_path}"
+        else
+          puts "You cannot backup to #{bk_file_path}"
+          puts 'So we will backup to tmp dir'
+          tmp = tmp_file_path
+          FileUtils.cp(hosts_file_path, tmp)
+          puts "backup: #{tmp}"
+        end
+      end
+
       def save(actives, inactives)
+        # TODO: reload hosts file if chnaged after load
+        hosts_file_path = RHosts.config.hosts_file_path
+        unless File.writable?(hosts_file_path)
+          puts "You cannot save to #{hosts_file_path}"
+          return
+        end
+
+        File.open(RHosts.config.hosts_file_path, 'w') do |file|
+          actives.each{ |ip, hosts| file.write("#{ip} #{hosts.join(' ')}\n") }
+          inactives.each{ |ip, hosts| file.write("##{ip} #{hosts.join(' ')}\n") }
+        end
+      end
+
+      private
+      def backup_file_path
+        hosts_file_path = RHosts.config.hosts_file_path
+        basename = File.basename(hosts_file_path)
+        File.join(RHosts.config.backup_dir, "#{basename}.#{Time.now.to_i}")
+      end
+
+      def tmp_file_path
+        hosts_file_path = RHosts.config.hosts_file_path
+        basename = File.basename(hosts_file_path)
+        File.join('/tmp', "#{basename}.#{Time.now.to_i}")
       end
     end
 

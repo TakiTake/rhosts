@@ -1,44 +1,51 @@
 require 'pp'
 require 'readline'
-require 'rhosts/configuration'
 require 'rhosts/filer'
 require 'rhosts/console/app'
+require 'rhosts/rulable'
 
 module RHosts
   class Console
-    attr_accessor :config
-
     include RHosts::ConsoleMethods
+    include RHosts::Rulable
+    include RHosts::Alias
 
-    def self.start
-      config = ::RHosts::Configuration.new
-      console = new(config)
-      console.start
+    alias_host 'exp',       'www.example.com'
+    alias_ip   'localhost', '127.0.0.1'
+
+    class << self
+      def start
+        @console = new
+
+        load_default_rules
+        load_run_command
+
+        @console.start
+      end
+
+      private
+      def load_default_rules
+        default_rules = File.read(RHosts.root + '/rhosts/console/default_rules.rb')
+        @console.instance_eval(default_rules)
+      end
+
+      def load_run_command
+        rhostsrc = File.join(File.expand_path("~"), ".rhostsrc")
+        if File.exist?(rhostsrc)
+          puts "load: #{rhostsrc}"
+          @console.instance_eval(File.read(rhostsrc))
+        end
+      end
     end
 
-    def initialize(config)
-      @config = config
-      @actives, @inactives = ::RHosts::Filer.load(@config.hosts_file_path)
+    def initialize
+      @actives, @inactives = RHosts::Filer.load
     end
 
     def start
-      while cmd = Readline.readline('rhosts> ', true)
-        case cmd.chomp
-        when 'a', 'actives'
-          p actives
-        when 'i', 'inactives'
-          p inactives
-        when /^(m|map) +(.*?) +(.*?)$/
-          map $2 => $3
-        when /^(u|unmap) +(.*?) +(.*?)$/
-          unmap $2 => $3
-        when 'hist', 'history'
-          puts Readline::HISTORY.to_a.join("\n")
-        when 'h', 'help'
-          help
-        when 'q', 'quit'
-          exit
-        end
+      while command = Readline.readline('rhosts> ', true)
+        # call matched rule with captures
+        rules.each{ |rule, action| action.call($~.captures) if rule.match command.chomp }
       end
     end
   end

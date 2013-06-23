@@ -1,13 +1,9 @@
 module RHosts
   class Configuration
-    attr_writer :hosts_file_path
+    attr_accessor :hosts_file_path, :backup_dir, :make_backup
 
-    def initialize
-      @@options ||= {}
-    end
-
-    def hosts_file_path
-      @hosts_file_path ||= '/etc/hosts'
+    def make_backup?
+      make_backup
     end
   end
 end
