@@ -4,8 +4,8 @@ module RHosts
   module Filer
     class << self
       def load
-        actives = {}
-        inactives = {}
+        actives   = Hash.new{ |h, k| h[k] = Set.new }
+        inactives = Hash.new{ |h, k| h[k] = Set.new }
 
         File.open(RHosts.config.hosts_file_path, 'r') do |file|
           file.each do |line|
@@ -55,8 +55,8 @@ module RHosts
         end
 
         File.open(RHosts.config.hosts_file_path, 'w') do |file|
-          actives.each{ |ip, hosts| file.write("#{ip} #{hosts.join(' ')}\n") }
-          inactives.each{ |ip, hosts| file.write("##{ip} #{hosts.join(' ')}\n") }
+          actives.each{ |ip, hosts| file.write("#{ip} #{hosts.to_a.join(' ')}\n") }
+          inactives.each{ |ip, hosts| file.write("##{ip} #{hosts.to_a.join(' ')}\n") }
         end
         puts "save: #{hosts_file_path}"
       end

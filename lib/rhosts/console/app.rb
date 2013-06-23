@@ -3,16 +3,20 @@ require 'ipaddress'
 module RHosts
   module ConsoleMethods
     def actives
-      @actives ||= {}
+      @actives ||= Hash.new{ |h, k| h[k] = Set.new }
     end
 
     def inactives
-      @inactives ||= {}
+      @inactives ||= Hash.new{ |h, k| h[k] = Set.new }
     end
 
     def map(target)
       process(target) do |host, ip|
-        actives[ip] ||= []
+        unless inactives[ip].empty?
+          inactives[ip].delete_if{ |h| h == host }
+          inactives.delete(ip) if inactives[ip].empty?
+        end
+
         actives[ip] << host
         puts "map #{host} to #{ip}"
       end
@@ -20,7 +24,11 @@ module RHosts
 
     def unmap(target)
       process(target) do |host, ip|
-        inactives[ip] ||= []
+        unless actives[ip].empty?
+          actives[ip].delete_if{ |h| h == host }
+          actives.delete(ip) if actives[ip].empty?
+        end
+
         inactives[ip] << host
         puts "unmap #{host} from #{ip}"
       end

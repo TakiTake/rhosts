@@ -12,6 +12,7 @@ rhosts is a command that facilitates the management of the host file.
 ```
 $ rhosts
 rhosts> all
+### actives
 127.0.0.1
   localhost
   dev-www.example.com
@@ -19,7 +20,8 @@ rhosts> all
 127.0.0.2
   stg-www.example.com
 
-#127.0.0.1
+### inactives
+127.0.0.1
   stg-www.example.com
 
 ```
@@ -27,6 +29,7 @@ rhosts> all
 ## show active hosts
 ```
 rhosts> actives
+### actives
 127.0.0.1
   localhost
   dev-www.example.com
@@ -38,7 +41,8 @@ rhosts> actives
 
 ## show inactive hosts
 ```
-#127.0.0.1
+### inactives
+127.0.0.1
   stg-www.example.com
 
 ```
@@ -47,6 +51,7 @@ rhosts> actives
 ```
 $ rhosts
 rhosts> actives
+### actives
 127.0.0.1
   localhost
   dev-www.example.com
@@ -56,6 +61,7 @@ rhosts> actives
 
 rhosts> map "dev-www.example.co.jp" => "127.0.0.1"
 rhosts> actives
+### actives
 127.0.0.1
   localhost
   dev-www.example.com
@@ -70,6 +76,7 @@ rhosts> actives
 ```
 $ rhosts
 rhosts> actives
+### actives
 127.0.0.1
   localhost
   dev-www.example.com
@@ -79,6 +86,7 @@ rhosts> actives
 
 rhosts> unmap "dev-www.example.com" => "127.0.0.1"
 rhosts> actives
+### actives
 127.0.0.1
   localhost
 
