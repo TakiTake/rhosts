@@ -1,8 +1,8 @@
-require 'pp'
 require 'readline'
 require 'rhosts/filer'
 require 'rhosts/console/app'
 require 'rhosts/rulable'
+require 'rhosts/alias'
 
 module RHosts
   class Console
@@ -19,6 +19,11 @@ module RHosts
 
         load_default_rules
         load_run_command
+
+        unless File.writable?(RHosts.config.hosts_file_path)
+          STDERR.puts "Hosts file is not writable. Please check permission"
+          exit 1
+        end
 
         @console.start
       end

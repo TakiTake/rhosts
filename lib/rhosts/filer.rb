@@ -1,5 +1,4 @@
 require 'ipaddress'
-require 'pry'
 
 module RHosts
   module Filer
@@ -35,15 +34,15 @@ module RHosts
         bk_file_path = backup_file_path
         hosts_file_path = RHosts.config.hosts_file_path
 
-        if File.writable?(bk_file_path)
+        if File.writable?(RHosts.config.backup_dir)
           FileUtils.cp(hosts_file_path, bk_file_path)
           puts "backup: #{bk_file_path}"
         else
-          puts "You cannot backup to #{bk_file_path}"
-          puts 'So we will backup to tmp dir'
+          STDERR.puts "backup file is not writable. #{bk_file_path}"
+          STDERR.puts 'So we will backup to tmp dir'
           tmp = tmp_file_path
           FileUtils.cp(hosts_file_path, tmp)
-          puts "backup: #{tmp}"
+          STDERR.puts "backup: #{tmp}"
         end
       end
 
@@ -51,14 +50,15 @@ module RHosts
         # TODO: reload hosts file if chnaged after load
         hosts_file_path = RHosts.config.hosts_file_path
         unless File.writable?(hosts_file_path)
-          puts "You cannot save to #{hosts_file_path}"
-          return
+          STDERR.puts "Hosts file is not writable. Please check permission"
+          exit 1
         end
 
         File.open(RHosts.config.hosts_file_path, 'w') do |file|
           actives.each{ |ip, hosts| file.write("#{ip} #{hosts.join(' ')}\n") }
           inactives.each{ |ip, hosts| file.write("##{ip} #{hosts.join(' ')}\n") }
         end
+        puts "save: #{hosts_file_path}"
       end
 
       private

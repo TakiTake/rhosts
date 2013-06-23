@@ -1,5 +1,4 @@
-require 'rhosts/alias'
-require 'pry'
+require 'ipaddress'
 
 module RHosts
   module ConsoleMethods
@@ -47,6 +46,13 @@ module RHosts
       target.each do |host, ip|
         host = alias_hosts[host] || host
         ip   = alias_ips[ip]     || ip
+
+        ip_without_zone_index = ip.split('%')[0]
+        unless IPAddress.valid?(ip_without_zone_index)
+          STDERR.puts "#{ip} is invalid IP Address!"
+          next
+        end
+
         block.call(host, ip)
       end
 
