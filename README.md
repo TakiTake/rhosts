@@ -41,6 +41,7 @@ rhosts> actives
 
 ## show inactive hosts
 ```
+rhosts> inactives
 ### inactives
 127.0.0.1
   stg-www.example.com
