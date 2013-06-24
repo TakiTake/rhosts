@@ -38,6 +38,9 @@ module RHosts
         if File.writable?(RHosts.config.backup_dir)
           FileUtils.cp(hosts_file_path, bk_file_path)
           puts "backup: #{bk_file_path}"
+        elsif RHosts.config.sudo?
+          system "sudo cp #{hosts_file_path} #{bk_file_path}"
+          puts "backup: #{bk_file_path}"
         else
           STDERR.puts "backup file is not writable. #{bk_file_path}"
           STDERR.puts 'So we will backup to tmp dir'
@@ -50,16 +53,27 @@ module RHosts
       def save(actives, inactives)
         # TODO: reload hosts file if chnaged after load
         hosts_file_path = RHosts.config.hosts_file_path
-        unless File.writable?(hosts_file_path)
+
+        contents = []
+        contents += actives.map{ |ip, hosts| "#{ip} #{hosts.to_a.join(' ')}" }
+        contents += inactives.map{ |ip, hosts| "##{ip} #{hosts.to_a.join(' ')}" }
+
+        if File.writable?(hosts_file_path)
+          File.open(hosts_file_path, 'w') do |file|
+            file.write contents.join("\n")
+          end
+          puts "save: #{hosts_file_path}"
+        elsif RHosts.config.sudo?
+          tmp = tmp_file_path
+          File.open(tmp, 'w') do |file|
+            file.write contents.join("\n")
+          end
+          system "sudo mv #{tmp} #{hosts_file_path}"
+          puts "save: #{hosts_file_path}"
+        else
           STDERR.puts "Hosts file is not writable. Please check permission"
           exit 1
         end
-
-        File.open(RHosts.config.hosts_file_path, 'w') do |file|
-          actives.each{ |ip, hosts| file.write("#{ip} #{hosts.to_a.join(' ')}\n") }
-          inactives.each{ |ip, hosts| file.write("##{ip} #{hosts.to_a.join(' ')}\n") }
-        end
-        puts "save: #{hosts_file_path}"
       end
 
       private

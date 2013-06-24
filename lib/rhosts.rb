@@ -25,4 +25,5 @@ RHosts.configure do |c|
   c.hosts_file_path = '/etc/hosts'
   c.backup_dir      = '/etc'
   c.make_backup     = true
+  c.sudo            = false
 end

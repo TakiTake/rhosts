@@ -1,0 +1,18 @@
+# You can override these settings
+RHosts.configure do |c|
+  #c.hosts_file_path = '/etc/hosts'
+  #c.backup_dir      = '/etc'
+  #c.make_backup     = true
+  #c.sudo            = false
+end
+
+# define alias name for IP
+alias_ip "lo", "127.0.0.1"
+
+# define alias name for host
+alias_host "exp", "www.example.com"
+
+# define original rule
+rule /^([\w\.]+) -> local$/ do |hostname|
+  map hostname => "127.0.0.1"
+end

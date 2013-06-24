@@ -1,5 +1,5 @@
 module RHosts # :nodoc:
   module Version # :nodoc:
-    STRING = '0.0.2'
+    STRING = '0.1.0'
   end
 end

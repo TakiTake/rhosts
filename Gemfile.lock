@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rhosts (0.0.1)
+    rhosts (0.1.0)
       ipaddress (~> 0.8.0)
 
 GEM
