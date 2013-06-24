@@ -55,8 +55,16 @@ module RHosts
         hosts_file_path = RHosts.config.hosts_file_path
 
         contents = []
-        contents += actives.map{ |ip, hosts| "#{ip} #{hosts.to_a.join(' ')}" }
-        contents += inactives.map{ |ip, hosts| "##{ip} #{hosts.to_a.join(' ')}" }
+        contents += actives.map do |ip, hosts|
+          hosts.map do |host|
+            "#{ip} #{host}"
+          end
+        end.flatten
+        contents += inactives.map do |ip, hosts|
+          hosts.map do |host|
+            "##{ip} #{host}"
+          end
+        end.flatten
 
         if File.writable?(hosts_file_path)
           File.open(hosts_file_path, 'w') do |file|
