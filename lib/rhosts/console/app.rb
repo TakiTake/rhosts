@@ -58,7 +58,7 @@ module RHosts
 
         ip_without_zone_index = ip.split('%')[0]
         unless IPAddress.valid?(ip_without_zone_index)
-          STDERR.puts "#{ip} is invalid IP Address!"
+          warn "#{ip} is invalid IP Address!"
           next
         end
 

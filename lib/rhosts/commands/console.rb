@@ -21,7 +21,7 @@ module RHosts
         load_run_command
 
         unless File.writable?(RHosts.config.hosts_file_path) and RHosts.config.sudo?
-          STDERR.puts "Hosts file is not writable. Please check permission"
+          warn "Hosts file is not writable. Please check permission"
           exit 1
         end
 

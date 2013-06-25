@@ -17,3 +17,5 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 end
+
+Dir["./spec/support/**/*.rb"].sort.each { |f| require f }

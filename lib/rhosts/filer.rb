@@ -29,6 +29,9 @@ module RHosts
         end
 
         [actives, inactives]
+      rescue
+        warn "hosts file load error. #{RHosts.config.hosts_file_path}"
+        exit
       end
 
       def backup
@@ -42,11 +45,11 @@ module RHosts
           system "sudo cp #{hosts_file_path} #{bk_file_path}"
           puts "backup: #{bk_file_path}"
         else
-          STDERR.puts "backup file is not writable. #{bk_file_path}"
-          STDERR.puts 'So we will backup to tmp dir'
+          warn "backup file is not writable. #{bk_file_path}"
+          warn 'So we will backup to tmp dir'
           tmp = tmp_file_path
           FileUtils.cp(hosts_file_path, tmp)
-          STDERR.puts "backup: #{tmp}"
+          warn "backup: #{tmp}"
         end
       end
 
@@ -79,7 +82,7 @@ module RHosts
           system "sudo mv #{tmp} #{hosts_file_path}"
           puts "save: #{hosts_file_path}"
         else
-          STDERR.puts "Hosts file is not writable. Please check permission"
+          warn "Hosts file is not writable. Please check permission"
           exit 1
         end
       end
