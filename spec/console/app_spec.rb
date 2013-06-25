@@ -26,7 +26,7 @@ describe 'ConsoleMethods' do
   end
 
   context 'hosts file is not exist' do
-    let(:hosts_file_path){ File.expand_path('/../spec/hosts/not_exist_path', RHosts.root) }
+    let(:hosts_file_path){ File.expand_path('../spec/hosts/not_exist_path', RHosts.root) }
     let(:make_backup){ true }
 
     it 'should display error message and exit' do
