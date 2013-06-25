@@ -6,8 +6,6 @@ describe 'ConsoleMethods' do
   include RHosts::ConsoleMethods
   include_context 'capture_stderr'
 
-  STDERR_LOG = File.expand_path('../spec/tmp/stderr.log', RHosts.root)
-
   before do
     RHosts.configure do |c|
       c.hosts_file_path = hosts_file_path
