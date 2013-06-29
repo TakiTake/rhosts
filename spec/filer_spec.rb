@@ -66,14 +66,14 @@ describe 'Filer' do
       let(:input){ StringIO.new("#127.0.0.1 localhost") }
       let(:output){ StringIO.new }
 
-      it 'should be loaded as active' do
+      it 'should be loaded as inactive' do
         hosts = Set.new()
         hosts += ['localhost']
         expect(@actives).to eq({})
         expect(@inactives).to eq({ '127.0.0.1' => hosts })
       end
 
-      it 'should be saved as active' do
+      it 'should be saved as inactive' do
         expect(@output.string).to eq(@input.string)
       end
     end
