@@ -22,7 +22,6 @@ module RHosts
               ip_without_zone_index = ip.split('%')[0]
               next unless IPAddress.valid?(ip_without_zone_index)
 
-              storage[ip] ||= []
               storage[ip] += hosts
             end
           end
