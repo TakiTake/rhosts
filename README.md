@@ -95,3 +95,10 @@ rhosts> actives
   stg-www.example.com
 
 ```
+
+## advanced
+You can override default settings.
+You can add original rule to map/unmap.
+You can define alias name to IP/host.
+
+see .rhostsrc
