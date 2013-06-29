@@ -10,9 +10,6 @@ module RHosts
     include RHosts::Rulable
     include RHosts::Alias
 
-    alias_host 'exp',       'www.example.com'
-    alias_ip   'localhost', '127.0.0.1'
-
     class << self
       def start
         @console = new
