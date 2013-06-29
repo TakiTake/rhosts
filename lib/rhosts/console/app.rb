@@ -13,10 +13,13 @@ module RHosts
 
     def map(target)
       process(target) do |host, ip|
+        inactivate(host)
+
         unless inactives[ip].empty?
           inactives[ip].delete_if{ |h| h == host }
-          inactives.delete(ip) if inactives[ip].empty?
         end
+
+        inactives.delete(ip) if inactives[ip].empty?
 
         actives[ip] << host
         puts "map #{host} to #{ip}"
@@ -27,8 +30,9 @@ module RHosts
       process(target) do |host, ip|
         unless actives[ip].empty?
           actives[ip].delete_if{ |h| h == host }
-          actives.delete(ip) if actives[ip].empty?
         end
+
+        actives.delete(ip) if actives[ip].empty?
 
         inactives[ip] << host
         puts "unmap #{host} from #{ip}"
@@ -70,6 +74,17 @@ module RHosts
 
       # TODO
       # after_actions.each{ |action| action.call }
+    end
+
+    def inactivate(host)
+      actives.each do |active_ip, active_hosts|
+        if active_hosts.include?(host)
+          active_hosts.delete(host)
+          actives.delete(active_ip) if active_hosts.empty?
+
+          inactives[active_ip] << host
+        end
+      end
     end
   end
 end
