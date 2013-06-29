@@ -7,7 +7,7 @@ describe 'Filer' do
 
   context 'hosts file is not exist' do
     before do
-      FileMock.error('read')
+      RHosts::Filer::Mock.error('read')
     end
 
     it 'should display error message and exit' do
@@ -24,9 +24,9 @@ describe 'Filer' do
       @input  = input
       @output = output
 
-      FileMock.read(@input)
-      FileMock.writable(true)
-      FileMock.write(@output)
+      RHosts::Filer::Mock.read(@input)
+      RHosts::Filer::Mock.writable(true)
+      RHosts::Filer::Mock.write(@output)
 
       @actives, @inactives = RHosts::Filer.load
       RHosts::Filer.save(@actives, @inactives)
