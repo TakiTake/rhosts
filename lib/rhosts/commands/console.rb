@@ -17,7 +17,7 @@ module RHosts
         load_default_rules
         load_run_command
 
-        unless File.writable?(RHosts.config.hosts_file_path) and RHosts.config.sudo?
+        unless File.writable?(RHosts.config.hosts_file_path) or RHosts.config.sudo?
           warn "Hosts file is not writable. Please check permission"
           exit 1
         end
